@@ -1,8 +1,8 @@
 (ns adventure.core
   (:gen-class)
-  (:require [quil.core :as q])
-  (:require adventure.initial)
-  (:refer adventure.initial))
+  (:require adventure.initial adventure.sketch)
+  (:refer adventure.initial)
+  (:refer adventure.sketch))
 
 (defn -main
   "I don't do a whole lot ... yet."
