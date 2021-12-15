@@ -1,5 +1,6 @@
 (ns adventure.core
-  (:gen-class))
+  (:gen-class)
+  (:require [quil.core :as q]))
 
 (defn -main
   "I don't do a whole lot ... yet."
