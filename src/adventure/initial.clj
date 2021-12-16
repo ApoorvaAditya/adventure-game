@@ -3,16 +3,27 @@
 (def init-map
     {:foyer {:desc "The walls are freshly painted but do not have any pictures.  You get the feeling it was just created for a game or something."
              :title "in the foyer"
-             :dir {:south :grue-pen}
+             :dir {:north :room1}
+             :enemies #{}
              :contents #{:raw-egg}}
+     :room1 {:desc ""
+             :title ""
+             :enemies {{:type :normal1}
+                        {:type :normal1}}
+             :contents #{:key}
+             }
      :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."
                 :title "in the grue pen"
                 :dir {:north :foyer}
                 :contents #{}}
      })
 
+(def enemies
+    {:normal1 {:color :red}
+     :normal2 {:color :yellow}})
+
 (def init-items
-{:raw-egg {:desc "This is a raw egg.  You probably want to cook it before eating it."
+    {:raw-egg {:desc "This is a raw egg.  You probably want to cook it before eating it."
             :name "a raw egg" }})
 
 (def init-adventurer
@@ -22,3 +33,8 @@
         :lives 3
         :tick 0
         :seen #{}})
+
+(def init-state 
+    {:rooms init-map
+     :items init-items
+     :adventurer init-adventurer})

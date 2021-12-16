@@ -1,23 +1,54 @@
 (ns adventure.sketch
-  (:require [quil.core :as q]))
+  (:require [quil.core :as q])
+  (:require adventure.constants)
+  (:refer adventure.constants)
+  (:require adventure.initial) ;; Only for init-state to test
+  (:refer adventure.initial))  ;; Only for init-state to test
+
+(defn draw-wall-horizontal [y]
+  (q/rect 0 y window-width wall-width))
+
+(defn draw-wall-vertical [x]
+  (q/rect x 0 wall-width window-height))
+
+(defn draw-wall-horizontal-with-door [y]
+  (let [wall-dist (/ (- window-width door-width) 2)]
+    (q/rect 0 y wall-dist wall-width)
+    (q/rect (+ wall-dist door-width) y wall-dist wall-width)))
+
+(defn draw-wall-vertical-with-door [x]
+  (let [wall-dist (/ (- window-height door-width) 2)]
+    (q/rect x 0 wall-width wall-dist)
+    (q/rect x (+ wall-dist door-width) wall-width wall-dist)))
+
+(defn draw-room [state]
+  (let [player-location (-> state :adventurer :location)
+        current-room (-> state :rooms player-location)
+        nearby-rooms (:dir current-room)]
+    (if (get nearby-rooms :north)
+      (draw-wall-horizontal-with-door 0)
+      (draw-wall-horizontal 0))
+    (if (get nearby-rooms :south)
+      (draw-wall-horizontal-with-door (- window-height wall-width))
+      (draw-wall-horizontal (- window-height wall-width)))
+    (if (get nearby-rooms :east)
+      (draw-wall-vertical-with-door (- window-width wall-width))
+      (draw-wall-vertical (- window-width wall-width)))
+    (if (get nearby-rooms :west)
+      (draw-wall-vertical-with-door 0)
+      (draw-wall-vertical 0))))
 
 (defn setup []
-  (q/frame-rate 1)                    ;; Set framerate to 1 FPS
-  (q/background 200))                 ;; Set the background colour to
-                                      ;; a nice shade of grey.
+  (q/background 200))
+
 (defn draw []
-  (q/stroke (q/random 255))             ;; Set the stroke colour to a random grey
-  (q/stroke-weight (q/random 10))       ;; Set the stroke thickness randomly
-  (q/fill (q/random 255))               ;; Set the fill colour to a random grey
+  (q/background 255 0 0)
+  (q/no-stroke)
+  (draw-room init-state))   ;; Change this to current state
 
-  (let [diam (q/random 100)             ;; Set the diameter to a value between 0 and 100
-        x    (q/random (q/width))       ;; Set the x coord randomly within the sketch
-        y    (q/random (q/height))]     ;; Set the y coord randomly within the sketch
-    (q/ellipse x y diam diam)))         ;; Draw a circle at x y with the correct diameter
-
-(q/defsketch example                  ;; Define a new sketch named example
-  :title "Oh so many grey circles"    ;; Set the title of the sketch
-  :settings #(q/smooth 2)             ;; Turn on anti-aliasing
-  :setup setup                        ;; Specify the setup fn
-  :draw draw                          ;; Specify the draw fn
-  :size [323 200])                    ;; You struggle to beat the golden ratio
+(q/defsketch adventure
+  :title "Adventure"
+  :settings #(q/smooth 2)
+  :setup setup
+  :draw draw
+  :size [window-width window-height])
