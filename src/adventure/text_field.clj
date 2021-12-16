@@ -2,7 +2,7 @@
     (:require [quil.core :as q])
     (:use adventure.constants))
 
-(defn draw-text-field [state text]
+(defn draw-text-field [state]
     (let [y (- (- window-height text-field-height) text-field-padding)
           width  (- (/ (- window-width door-width) 2) (* text-field-padding 2))]
     (q/fill 0)
@@ -10,4 +10,4 @@
     (q/fill 255)
     (q/text-align :left :top)
     (q/text-size 20)
-    (q/text text text-field-padding y)))
+    (q/text (:command state) text-field-padding y)))
