@@ -7,10 +7,15 @@
     (get-in state [:map (get-current-location state)]))
 
 (defn remove-last-char [text]
-    (subs text 0 (- (count text) 1)))
+    (if (> (count text) 0)
+        (subs text 0 (- (count text) 1))
+        text))
 
 (defn clear-response [state]
     (assoc state :response ""))
 
 (defn clear-command [state]
     (assoc state :command ""))
+
+(defn respond [state res]
+    (assoc state :response res))
