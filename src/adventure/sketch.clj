@@ -22,6 +22,8 @@
             (clear-command (react state (canonicalize (:command state))))
           (= (:key-code event) 8)
             (clear-response (clojure.core/update state :command remove-last-char))
+          (q/key-coded? (:raw-key event))
+            (clear-response state)
           :else (clear-response (react state (:raw-key event)))))
 
 (defn draw [state]
