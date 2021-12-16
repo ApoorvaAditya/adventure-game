@@ -22,6 +22,8 @@
 (defn draw-room [state]
     (let [current-room (get-current-room state)
           nearby-rooms (:dir current-room)]
+        (q/no-stroke)
+        (q/fill wall-color)
         (if (get nearby-rooms :north)
             (draw-wall-horizontal-with-door 0)
             (draw-wall-horizontal 0))
