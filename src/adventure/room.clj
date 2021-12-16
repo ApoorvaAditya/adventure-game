@@ -1,7 +1,8 @@
 (ns adventure.room
     (:require [quil.core :as q])
-    (:require adventure.constants)
-    (:refer adventure.constants))
+    (:require adventure.constants adventure.utils)
+    (:refer adventure.constants)
+    (:refer adventure.utils))
 
 (defn draw-wall-horizontal [y]
     (q/rect 0 y window-width wall-width))
@@ -20,9 +21,8 @@
         (q/rect x (+ wall-dist door-width) wall-width wall-dist)))
 
 (defn draw-room [state]
-    (let [player-location (-> state :adventurer :location)
-            current-room (-> state :rooms player-location)
-            nearby-rooms (:dir current-room)]
+    (let [current-room (get-current-room state)
+          nearby-rooms (:dir current-room)]
         (if (get nearby-rooms :north)
             (draw-wall-horizontal-with-door 0)
             (draw-wall-horizontal 0))
