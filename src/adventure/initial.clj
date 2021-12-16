@@ -35,6 +35,6 @@
         :seen #{}})
 
 (def init-state 
-    {:rooms init-map
+    {:map init-map
      :items init-items
      :adventurer init-adventurer})
