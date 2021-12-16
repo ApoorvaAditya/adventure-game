@@ -7,7 +7,8 @@
           adventure.interaction
           adventure.initial ;; Only for init-state to test
           adventure.text-field
-          adventure.utils))
+          adventure.utils
+          adventure.response))
 
 (defn setup []
     (q/background 200)
@@ -18,16 +19,16 @@
 
 (defn key-pressed [state event]
     (cond (= (:key-code event) 10)
-            (let [new-state (react state (canonicalize (:command state)))]
-                (assoc new-state :command ""))
+            (clear-command (react state (canonicalize (:command state))))
           (= (:key-code event) 8)
-            (clojure.core/update state :command remove-last-char)
-          :else (react state (:raw-key event))))
+            (clear-response (clojure.core/update state :command remove-last-char))
+          :else (clear-response (react state (:raw-key event)))))
 
 (defn draw [state]
     (q/background background-color)
     (draw-room state)
-    (draw-text-field state))   ;; Change this to current state
+    (draw-text-field state)
+    (draw-response state))
 
 (q/defsketch adventure
     :title "Adventure"

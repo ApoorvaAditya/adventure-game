@@ -39,4 +39,5 @@
     {:map init-map
      :items init-items
      :adventurer init-adventurer
-     :command ""})
+     :command ""
+     :response ""})

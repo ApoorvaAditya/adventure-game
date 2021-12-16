@@ -9,5 +9,5 @@
     (q/rect text-field-padding y width text-field-height)
     (q/fill 255)
     (q/text-align :left :top)
-    (q/text-size 20)
+    (q/text-size text-size)
     (q/text (:command state) text-field-padding y)))

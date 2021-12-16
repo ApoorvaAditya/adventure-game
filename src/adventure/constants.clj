@@ -9,5 +9,8 @@
 (def door-width 100)
 (def wall-color [255 255 255])
 
+(def response-text-size 10)
+
+(def text-size 20)
 (def text-field-height 30)
 (def text-field-padding 10)

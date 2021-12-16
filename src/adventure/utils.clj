@@ -8,3 +8,9 @@
 
 (defn remove-last-char [text]
     (subs text 0 (- (count text) 1)))
+
+(defn clear-response [state]
+    (assoc state :response ""))
+
+(defn clear-command [state]
+    (assoc state :command ""))
