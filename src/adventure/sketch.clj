@@ -1,20 +1,37 @@
 (ns adventure.sketch
-    (:require [quil.core :as q])
+    (:refer-clojure :exclude [update])
+    (:require [quil.core :as q]
+              [quil.middleware :as m])
     (:use adventure.constants
           adventure.room
-          adventure.initial)) ;; Only for init-state to test
+          adventure.interaction
+          adventure.initial
+          adventure.text-field)) ;; Only for init-state to test
 
 (defn setup []
-    (q/background 200))
+    (q/background 200)
+    init-state)
 
-(defn draw []
-    (q/background 255 0 0)
-    (q/no-stroke)
-    (draw-room init-state))   ;; Change this to current state
+(defn update [state]
+    state)
+
+(defn key-pressed [state event]
+    (react state (:key event)))
+
+(defn key-typed [state event]
+    (println event)
+    state) 
+
+(defn draw [state]
+    (q/background background-color)
+    (draw-room state)
+    (draw-text-field state "Hello"))   ;; Change this to current state
 
 (q/defsketch adventure
     :title "Adventure"
-    :settings #(q/smooth 2)
+    :middleware [m/fun-mode]
     :setup setup
     :draw draw
-    :size [window-width window-height])
+    :key-pressed key-pressed
+    :key-typed key-typed
+    :size [window-width window-height]) 
