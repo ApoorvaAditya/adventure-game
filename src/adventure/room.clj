@@ -1,8 +1,7 @@
 (ns adventure.room
     (:require [quil.core :as q])
-    (:require adventure.constants adventure.utils)
-    (:refer adventure.constants)
-    (:refer adventure.utils))
+    (:use adventure.constants 
+          adventure.utils))
 
 (defn draw-wall-horizontal [y]
     (q/rect 0 y window-width wall-width))

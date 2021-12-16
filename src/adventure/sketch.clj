@@ -1,11 +1,8 @@
 (ns adventure.sketch
     (:require [quil.core :as q])
-    (:require adventure.constants)
-    (:refer adventure.constants)
-    (:require adventure.room)
-    (:refer adventure.room)
-    (:require adventure.initial) ;; Only for init-state to test
-    (:refer adventure.initial))  ;; Only for init-state to test
+    (:use adventure.constants
+          adventure.room
+          adventure.initial)) ;; Only for init-state to test
 
 (defn setup []
     (q/background 200))
