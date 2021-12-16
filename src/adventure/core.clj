@@ -1,10 +1,13 @@
 (ns adventure.core
     (:gen-class)
-    (:require adventure.initial adventure.sketch)
-    (:refer adventure.initial)
-    (:refer adventure.sketch))
+    (:use adventure.initial 
+          adventure.sketch 
+          adventure.interaction))
 
 (defn -main
-    "I don't do a whole lot ... yet."
+    "Initialize the adventure"
     [& args]
-    (println "Hello, World!"))
+    (loop [state init-state]
+        (let [_  (println state)
+            command (read-line)]
+        (recur (react state (canonicalize command))))))
