@@ -38,4 +38,5 @@
 (def init-state 
     {:map init-map
      :items init-items
-     :adventurer init-adventurer})
+     :adventurer init-adventurer
+     :command ""})

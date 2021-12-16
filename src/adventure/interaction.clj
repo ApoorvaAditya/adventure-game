@@ -12,14 +12,18 @@
             (assoc-in state [:adventurer :location] dest))))
 
 (defn react [state input]
-    (match input 
-        [:move dir] (move state dir)
-        :up (move state :north)
-        :down (move state :south)
-        :right (move state :east)
-        :left (move state :west)
-        :else (do (println "Cannot recognize input")
-                  state)))
+    (println input)
+    (if (char? input)
+        (update state :command str input)
+        (match input
+            [:move dir] (move state dir)
+            "n" (move state :north)
+            :up (move state :north)
+            :down (move state :south)
+            :right (move state :east)
+            :left (move state :west)
+            :else (do (println "Cannot recognize input")
+                      state))))
 
 (defn canonicalize [input]
     (mapv keyword (str/split (-> input str/trim str/lower-case) #" ")))
