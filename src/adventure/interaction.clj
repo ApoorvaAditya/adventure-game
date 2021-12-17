@@ -1,6 +1,7 @@
 (ns adventure.interaction
     (:require [clojure.string :as str])
     (:require [clojure.core.match :refer [match]])
+    (:require [quil.core :as q])
     (:use adventure.utils))
 
 (defn move [state dir]
@@ -9,6 +10,9 @@
         (if (nil? dest)
             (respond state "Cannot move in that direction")
             (assoc-in state [:adventurer :location] dest))))
+
+(defn quit []
+    (q/exit))
 
 (defn react [state input]
     (println input)
@@ -25,6 +29,8 @@
             [:east] (move state :east)
             [:w] (move state :west)
             [:west] (move state :west)
+            [:quit] (quit)
+            [:exit] (quit)
             :else (respond state "Cannot recognize input"))))
 
 (defn canonicalize [input]
