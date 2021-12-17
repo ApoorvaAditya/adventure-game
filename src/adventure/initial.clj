@@ -6,7 +6,7 @@
              :dir {:north :room1}
              :enemies #{}
              :contents #{:raw-egg
-                         :dog-shit}}
+                         :stick}}
      :room1 {:desc ""
              :title ""
              :dir {:south :foyer
@@ -34,7 +34,11 @@
 
 (def init-items
     {:raw-egg {:desc "This is a raw egg.  You probably want to cook it before eating it."
-            :name "a raw egg" }})
+               :name "a raw egg" }
+     :key {:desc "This is a key. Might unlock something"
+           :name "a key"}
+     :stick {:dec "This is a stick. Don't hit yourself with it"
+             :name "a stick"}})
 
 (def init-adventurer
     {:location :foyer
@@ -50,4 +54,4 @@
      :adventurer init-adventurer
      :command ""
      :response ""
-     :inventory :opened})
+     :inventory :closed})

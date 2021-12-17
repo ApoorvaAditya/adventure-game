@@ -12,17 +12,17 @@
             (respond state "Cannot move in that direction")
             (assoc-in state [:adventurer :location] dest))))
 
-(defn create-items-str [items]
+(defn create-items-str [state items]
     (if (empty? items)
         "You see nothing"
-        (if (= (count items) 1) 
-            (str "You see " (name (first items)) ".")
-            (str "You see " (name (first items)) ".\n" (create-items-str (rest items))))))
+        (if (= (count items) 1)
+            (str "You see " (get-in state [:items (first items) :name]) ".")
+            (str "You see " (get-in state [:items (first items) :name]) ".\n" (create-items-str state (rest items))))))
 
 (defn look [state] 
     (let [current-location (get-current-location state)
           items (get-in state [:map current-location :contents])]
-          (respond state (create-items-str items))))
+          (respond state (create-items-str state items))))
 
 (defn open-inventory [state]
     (if (= (:inventory state) :opened)
