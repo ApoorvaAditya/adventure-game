@@ -8,7 +8,15 @@
              :contents #{:raw-egg}}
      :room1 {:desc ""
              :title ""
-             :dir {:south :foyer}
+             :dir {:south :foyer
+                   :east :room2}
+             :enemies {{:type :normal1}
+                        {:type :normal1}}
+             :contents #{:key}
+             }
+     :room2 {:desc ""
+             :title ""
+             :dir {:west :room1}
              :enemies {{:type :normal1}
                         {:type :normal1}}
              :contents #{:key}

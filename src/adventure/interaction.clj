@@ -11,14 +11,20 @@
             (assoc-in state [:adventurer :location] dest))))
 
 (defn react [state input]
+    (println input)
     (if (char? input)
         (update state :command str input)
         (match input
             [:move dir] (move state dir)
-            "n" (move state :north)
-            "s" (move state :south)
-            "e" (move state :east)
-            "w" (move state :west)
+            [:go dir] (move state dir)
+            [:n] (move state :north)
+            [:north] (move state :north)
+            [:s] (move state :south)
+            [:south] (move state :south)
+            [:e] (move state :east)
+            [:east] (move state :east)
+            [:w] (move state :west)
+            [:west] (move state :west)
             :else (respond state "Cannot recognize input"))))
 
 (defn canonicalize [input]
