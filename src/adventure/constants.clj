@@ -3,7 +3,7 @@
 (def window-width 500)
 (def window-height 400)
 
-(def background-color 0)
+(def background-color 127)
 
 (def wall-width 50)
 (def door-width 100)
