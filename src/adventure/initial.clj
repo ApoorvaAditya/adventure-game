@@ -5,7 +5,8 @@
              :title "in the foyer"
              :dir {:north :room1}
              :enemies #{}
-             :contents #{:raw-egg}}
+             :contents #{:raw-egg
+                         :dog-shit}}
      :room1 {:desc ""
              :title ""
              :dir {:south :foyer
@@ -48,4 +49,5 @@
      :items init-items
      :adventurer init-adventurer
      :command ""
-     :response ""})
+     :response ""
+     :inventory :opened})

@@ -1,4 +1,5 @@
 (ns adventure.interaction
+    (:refer-clojure :exclude [take drop])
     (:require [clojure.string :as str])
     (:require [clojure.core.match :refer [match]])
     (:require [quil.core :as q])
@@ -23,6 +24,20 @@
           items (get-in state [:map current-location :contents])]
           (respond state (create-items-str items))))
 
+(defn open-inventory [state]
+    (if (= (:inventory state) :opened)
+        (assoc state :inventory :closed)
+        (assoc state :inventory :opened)))
+
+(defn examine [state item]
+    state)
+
+(defn drop [state item]
+    state)
+
+(defn take [state item]
+    state)
+
 (defn quit []
     (q/exit))
 
@@ -43,6 +58,16 @@
             [:west] (move state :west)
 
             [:look] (look state)
+            
+            [:i] (open-inventory state)
+            [:inventory] (open-inventory state)
+            [:open :inventory] (open-inventory state)
+            [:open] (open-inventory state)
+            [:o] (open-inventory state)
+
+            [:examine item] (examine state item)
+            [:drop item] (drop state item)
+            [:take item] (take state item)
 
             [:quit] (quit)
             [:exit] (quit)

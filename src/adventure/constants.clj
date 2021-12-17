@@ -14,3 +14,6 @@
 (def text-size 20)
 (def text-field-height 30)
 (def text-field-padding 10)
+
+(def inventory-padding 20)
+(def inventory-item-size 50)
