@@ -39,7 +39,7 @@
      :key {:desc "This is a key. Might unlock something"
            :name "a key"
            :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\key.png"}
-     :stick {:dec "This is a stick. Don't hit yourself with it"
+     :stick {:desc "This is a stick. Don't hit yourself with it"
              :name "a stick"
              :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\stick.png"}})
 

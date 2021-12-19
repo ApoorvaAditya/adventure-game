@@ -19,3 +19,15 @@
 
 (defn respond [state res]
     (assoc state :response res))
+
+(defn add-to-inventory [state item]
+    (assoc-in state [:adventurer :inventory] (conj (get-in state [:adventurer :inventory]) item)))
+
+(defn remove-from-inventory [state item]
+    (assoc-in state [:adventurer :inventory] (disj (get-in state [:adventurer :inventory]) item)))
+
+(defn add-to-room [state room item]
+    (assoc-in state [:map room :contents] (conj (get-in state [:map room :contents]) item)))
+
+(defn remove-from-room [state room item]
+    (assoc-in state [:map room :contents] (disj (get-in state [:map room :contents]) item)))

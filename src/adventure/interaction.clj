@@ -32,15 +32,23 @@
 
 (defn examine [state item]
     (let [full-item (get-in state [:items item])]
-        (if (nil? (get-in state [:adventurer :inventory item]))
-            (respond state "You don't have that item in your inventory.")
-            (respond (assoc state :image-to-draw item) (:desc full-item)))))
+        (if (= (:inventory state) :opened)
+            (if (nil? (get-in state [:adventurer :inventory item]))
+                (respond state "You don't have that item in your inventory.")
+                (respond (assoc state :image-to-draw item) (:desc full-item)))
+            (respond state "Open inventory first"))))
 
 (defn drop [state item]
-    state)
+    (let [location (get-current-location state)]
+        (if (contains? (get-in state [:adventurer :inventory]) item)
+            (respond (add-to-room (remove-from-inventory state item) location item) (str "Dropped " (name item)))
+            (respond state (str (name item) " does'nt exist in your inventory")))))
 
 (defn take [state item]
-    state)
+    (let [location (get-current-location state)]
+        (if (contains? (get-in state [:map location :contents]) item)
+            (respond (remove-from-room (add-to-inventory state item) location item) (str "Picked up " (name item) "."))
+            (respond state "That item doesn't exist in the room"))))
 
 (defn back [state]
     (if (contains? state :image-to-draw)
@@ -51,6 +59,7 @@
     (q/exit))
 
 (defn react [state input]
+    (println (get-in state [:adventurer :inventory]))
     (if (char? input)
         (update state :command str input)
         (match input
@@ -76,6 +85,8 @@
             [:examine item] (examine state item)
             [:drop item] (drop state item)
             [:take item] (take state item)
+            [:pick :up item] (take state item)
+            [:pickup item] (take state item)
 
             [:back] (back state)
 
