@@ -25,8 +25,16 @@
         (q/rect (+ wall-width inventory-padding) (+ wall-width inventory-padding) max-width max-height)
         (q/rect-mode :corner))
 
+(defn draw-items [state])
+
+(defn draw-item [state]
+    (let [image (get-in state [:images (:image-to-draw state)])]
+        (q/image-mode :center)
+        (q/image image (/ window-width 2) (/ window-width 2) (-> window-width (- (* 2 wall-width)) (- (* 2 inventory-padding))) (-> window-height (- (* 2 wall-width)) (- (* 2 inventory-padding))))))
+
 (defn draw-inventory [state]
     (let [max-width (-> window-width (-  (* 2 wall-width)) (- (* 2 inventory-padding)) (/ inventory-item-size) (q/floor) (* inventory-item-size) (+ wall-width) (+ inventory-padding))
           max-height (-> window-height (-  (* 2 wall-width)) (- (* 2 inventory-padding)) (/ inventory-item-size) (q/floor) (* inventory-item-size) (+ wall-width) (+ inventory-padding))]
         (draw-background-rect max-width max-height)
-        (draw-grid max-width max-height)))
+        (draw-grid max-width max-height)
+        (draw-items state)))

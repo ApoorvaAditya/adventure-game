@@ -11,9 +11,12 @@
           adventure.response
           adventure.inventory))
 
+(defn init-images [state]
+    (assoc state :images 
+         (apply merge (map #(hash-map % (q/load-image (get-in state [:items % :url]))) (keys (:items state))))))
+
 (defn setup []
-    (q/background 200)
-    init-state)
+    (init-images init-state))
 
 (defn update [state]
     state)
@@ -33,7 +36,9 @@
     (draw-text-field state)
     (draw-response state)
     (if (= (:inventory state) :opened)
-        (draw-inventory state)))
+        (draw-inventory state))
+    (if (contains? state :image-to-draw)
+        (draw-item state)))
 
 (q/defsketch adventure
     :title "Adventure"

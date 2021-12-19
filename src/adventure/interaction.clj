@@ -3,7 +3,8 @@
     (:require [clojure.string :as str])
     (:require [clojure.core.match :refer [match]])
     (:require [quil.core :as q])
-    (:use adventure.utils))
+    (:use adventure.utils)
+    (:use adventure.inventory))
 
 (defn move [state dir]
     (let [current-location (get-current-location state)
@@ -30,7 +31,10 @@
         (assoc state :inventory :opened)))
 
 (defn examine [state item]
-    state)
+    (let [full-item (get-in state [:items item])]
+        (if (nil? (get-in state [:adventurer :inventory item]))
+            (respond state "You don't have that item in your inventory.")
+            (respond (assoc state :image-to-draw item) (:desc full-item)))))
 
 (defn drop [state item]
     state)
@@ -38,11 +42,15 @@
 (defn take [state item]
     state)
 
+(defn back [state]
+    (if (contains? state :image-to-draw)
+        (dissoc state :image-to-draw)
+        (respond state "Nothing to unexamine")))
+
 (defn quit []
     (q/exit))
 
 (defn react [state input]
-    (println input)
     (if (char? input)
         (update state :command str input)
         (match input
@@ -68,6 +76,8 @@
             [:examine item] (examine state item)
             [:drop item] (drop state item)
             [:take item] (take state item)
+
+            [:back] (back state)
 
             [:quit] (quit)
             [:exit] (quit)
