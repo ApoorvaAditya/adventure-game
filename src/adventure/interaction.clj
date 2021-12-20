@@ -38,11 +38,10 @@
                 (respond (assoc state :image-to-draw item) (:desc full-item)))
             (respond state "Open inventory first"))))
 
-(defn drop [state item]
-    (let [location (get-current-location state)]
-        (if (contains? (get-in state [:adventurer :inventory]) item)
-            (respond (add-to-room (remove-from-inventory state item) location item) (str "Dropped " (name item)))
-            (respond state (str (name item) " does'nt exist in your inventory")))))
+(defn back [state]
+    (if (contains? state :image-to-draw)
+        (dissoc state :image-to-draw)
+        (respond state "Nothing to unexamine")))
 
 (defn take [state item]
     (let [location (get-current-location state)]
@@ -50,10 +49,14 @@
             (respond (remove-from-room (add-to-inventory state item) location item) (str "Picked up " (name item) "."))
             (respond state "That item doesn't exist in the room"))))
 
-(defn back [state]
-    (if (contains? state :image-to-draw)
-        (dissoc state :image-to-draw)
-        (respond state "Nothing to unexamine")))
+(defn drop [state item]
+    (let [location (get-current-location state)]
+        (if (contains? (get-in state [:adventurer :inventory]) item)
+            (respond (add-to-room (remove-from-inventory state item) location item) (str "Dropped " (name item)))
+            (respond state (str (name item) " doesn't exist in your inventory")))))
+
+(defn fight [state]
+    state)
 
 (defn quit []
     (q/exit))
@@ -83,12 +86,13 @@
             [:o] (open-inventory state)
 
             [:examine item] (examine state item)
-            [:drop item] (drop state item)
+            [:back] (back state)
             [:take item] (take state item)
             [:pick :up item] (take state item)
             [:pickup item] (take state item)
+            [:drop item] (drop state item)
 
-            [:back] (back state)
+            [:fight] (fight state)
 
             [:quit] (quit)
             [:exit] (quit)

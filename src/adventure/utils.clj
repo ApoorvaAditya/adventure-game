@@ -31,3 +31,6 @@
 
 (defn remove-from-room [state room item]
     (assoc-in state [:map room :contents] (disj (get-in state [:map room :contents]) item)))
+
+(defn has-enemies [state]
+    (not (empty? (get-in state [:map (get-current-location state) :enemies]))))

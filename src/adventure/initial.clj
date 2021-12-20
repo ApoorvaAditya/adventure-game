@@ -58,4 +58,5 @@
      :adventurer init-adventurer
      :command ""
      :response ""
-     :inventory :closed})
+     :inventory :closed
+     :combat false})
