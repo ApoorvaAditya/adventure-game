@@ -22,10 +22,15 @@
     (let [curr-fill (q/current-fill)
           adventurer (:adventurer state)]
         (q/fill adventurer-color)
-        (q/ellipse (:x adventurer) (:y adventurer) adventurer-radius adventurer-radius)))
+        (q/ellipse (:x adventurer) (:y adventurer) adventurer-diameter adventurer-diameter)))
 
-(defn update-adventurer-position [state min-x max-x min-y max-y]
-    (let [x (get-in state [:adventurer :x])
+(defn update-adventurer-position [state]
+    (let [padding (+ wall-width (/ adventurer-diameter 2))
+          min-x padding
+          max-x (- window-width padding)
+          min-y padding
+          max-y (- window-height padding)
+          x (get-in state [:adventurer :x])
           y (get-in state [:adventurer :y])
           vel-x (get-in state [:adventurer :vel-x])
           vel-y (get-in state [:adventurer :vel-y])
@@ -41,35 +46,100 @@
                     (if (< try-y min-y)
                         min-y
                         try-y))]
-    (assoc-in (assoc-in state [:adventurer :x] new-x) [:adventurer :y] new-y)))
+        (-> state 
+            (assoc-in [:adventurer :x] new-x)
+            (assoc-in [:adventurer :y] new-y))))
 
-(defn update-enemies-positions [state]
-    )
+(defn draw-enemies [state enemies]
+    (if (not (empty? enemies))
+        (let [enemy (val (first enemies))
+              type (get-in state [:enemies (:type enemy)])]
+            (q/fill (:color type))
+            (q/ellipse (:x enemy) (:y enemy) (:diameter type) (:diameter type))
+            (draw-enemies state (rest enemies)))))
+
+(defn update-enemies-positions [state enemies]
+    (if (not (empty? enemies))
+        (let [id (key (first enemies))
+              enemy (val (first enemies))
+              type (get-in state [:enemies (:type enemy)])
+              padding (+ wall-width (/ (:diameter type) 2))
+              min-x padding
+              max-x (- window-width padding)
+              min-y padding
+              max-y (- window-height padding)
+              x (:x enemy)
+              y (:y enemy)
+              vel-x (:vel-x enemy)
+              vel-y (:vel-y enemy)
+              try-x (+ x vel-x)
+              try-y (+ y vel-y)
+              new-x (if (> try-x max-x)
+                        max-x 
+                        (if (< try-x min-x)
+                            min-x
+                            try-x))
+              new-y (if (> try-y max-y)
+                        max-y 
+                        (if (< try-y min-y)
+                            min-y
+                            try-y))
+             new-vel-x (if (or (> try-x max-x) (< try-x min-x))
+                           (- vel-x)
+                           vel-x)
+             new-vel-y (if (or (> try-y max-y) (< try-y min-y))
+                           (- vel-y)
+                           vel-y)]
+            (-> state
+                (assoc-in [:map (get-current-location state) :enemies id :x] new-x)
+                (assoc-in [:map (get-current-location state) :enemies id :y] new-y)
+                (assoc-in [:map (get-current-location state) :enemies id :vel-x] new-vel-x)
+                (assoc-in [:map (get-current-location state) :enemies id :vel-y] new-vel-y)
+                (update-enemies-positions (rest enemies))))
+        state))
 
 (defn update [state]
-    (let [padding (+ wall-width (/ adventurer-radius 2))]
-        (update-adventurer-position state padding
-            (- window-width padding)
-            padding
-            (- window-height padding))))
+    (-> state
+        (update-adventurer-position)
+        (update-enemies-positions (get-in state [:map (get-current-location state) :enemies]))))
 
 (defn key-pressed [state event]
     (cond (= (:key-code event) 10)
              (clear-command (react state (canonicalize (:command state))))
           (= (:key-code event) 8)
              (clear-response (clojure.core/update state :command remove-last-char))
+          (= (:key event) :up)
+             (assoc-in state [:adventurer :vel-y] (- adventurer-vel))
+          (= (:key event) :down)
+             (assoc-in state [:adventurer :vel-y] adventurer-vel)
+          (= (:key event) :left)
+             (assoc-in state [:adventurer :vel-x] (- adventurer-vel))
+          (= (:key event) :right)
+             (assoc-in state [:adventurer :vel-x] adventurer-vel)
           (q/key-coded? (:raw-key event))
              (clear-response state)
           :else (clear-response (react state (:raw-key event)))))
+
+(defn key-released [state event]
+    (cond (= (:key event) :up)
+              (assoc-in state [:adventurer :vel-y] 0)
+          (= (:key event) :down)
+              (assoc-in state [:adventurer :vel-y] 0)
+          (= (:key event) :left)
+              (assoc-in state [:adventurer :vel-x] 0)
+          (= (:key event) :right)
+              (assoc-in state [:adventurer :vel-x] 0)
+          :else state))
 
 (defn draw [state]
     (q/background background-color)
     (draw-room state)
     (draw-text-field state)
     (draw-response state)
+    (draw-adventurer state)
+    (draw-enemies state (get-in state [:map (get-current-location state) :enemies]))
     (if (= (:inventory state) :opened)
-        (draw-inventory state)
-        (draw-adventurer state))
+        (draw-inventory state))
     (if (contains? state :image-to-draw)
         (draw-item state)))
 
@@ -80,4 +150,5 @@
     :draw draw
     :update update
     :key-pressed key-pressed
+    :key-released key-released
     :size [window-width window-height]) 
