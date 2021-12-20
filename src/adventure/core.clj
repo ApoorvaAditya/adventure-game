@@ -8,7 +8,3 @@
 (defn -main
     "Initialize the adventure"
     [& args])
-    ;; (loop [state init-state]
-    ;;     (let [_  (println "What do you want to do")
-    ;;         command (read-line)]
-    ;;     (recur (react state (canonicalize command))))))
