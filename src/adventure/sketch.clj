@@ -18,8 +18,40 @@
 (defn setup []
     (init-images init-state))
 
+(defn draw-adventurer [state]
+    (let [curr-fill (q/current-fill)
+          adventurer (:adventurer state)]
+        (q/fill adventurer-color)
+        (q/ellipse (:x adventurer) (:y adventurer) adventurer-radius adventurer-radius)))
+
+(defn update-adventurer-position [state min-x max-x min-y max-y]
+    (let [x (get-in state [:adventurer :x])
+          y (get-in state [:adventurer :y])
+          vel-x (get-in state [:adventurer :vel-x])
+          vel-y (get-in state [:adventurer :vel-y])
+          try-x (+ x vel-x)
+          try-y (+ y vel-y)
+          new-x (if (> try-x max-x)
+                    max-x 
+                    (if (< try-x min-x)
+                        min-x
+                        try-x))
+          new-y (if (> try-y max-y)
+                    max-y 
+                    (if (< try-y min-y)
+                        min-y
+                        try-y))]
+    (assoc-in (assoc-in state [:adventurer :x] new-x) [:adventurer :y] new-y)))
+
+(defn update-enemies-positions [state]
+    )
+
 (defn update [state]
-    state)
+    (let [padding (+ wall-width (/ adventurer-radius 2))]
+        (update-adventurer-position state padding
+            (- window-width padding)
+            padding
+            (- window-height padding))))
 
 (defn key-pressed [state event]
     (cond (= (:key-code event) 10)
@@ -36,7 +68,8 @@
     (draw-text-field state)
     (draw-response state)
     (if (= (:inventory state) :opened)
-        (draw-inventory state))
+        (draw-inventory state)
+        (draw-adventurer state))
     (if (contains? state :image-to-draw)
         (draw-item state)))
 
@@ -45,5 +78,6 @@
     :middleware [m/fun-mode]
     :setup setup
     :draw draw
+    :update update
     :key-pressed key-pressed
     :size [window-width window-height]) 

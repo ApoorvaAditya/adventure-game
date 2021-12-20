@@ -61,7 +61,9 @@
         :tick 0
         :seen #{}
         :x (/ window-width 2)
-        :y (/ window-height 2)})
+        :y (/ window-height 2)
+        :vel-x 0
+        :vel-y 0})
 
 (def init-state 
     {:map init-map
