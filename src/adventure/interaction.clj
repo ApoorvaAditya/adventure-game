@@ -9,9 +9,12 @@
 (defn move [state dir]
     (let [current-location (get-current-location state)
           dest (dir (get-in state [:map current-location :dir]))]
-        (if (nil? dest)
-            (respond state "Cannot move in that direction")
-            (assoc-in state [:adventurer :location] dest))))
+        (println (:combat-status state))
+        (cond (:combat-status state) 
+                  (respond state "Cannot move to room while fighting")
+            (nil? dest)
+                (respond state "Cannot move in that direction")
+            :else (assoc-in state [:adventurer :location] dest))))
 
 (defn create-items-str [state items]
     (if (empty? items)
@@ -56,7 +59,10 @@
             (respond state (str (name item) " doesn't exist in your inventory")))))
 
 (defn fight [state]
-    state)
+    (assoc state :combat-status true))
+
+(defn run [state]
+    (assoc state :combat-status false))
 
 (defn quit []
     (q/exit))
@@ -92,6 +98,7 @@
             [:drop item] (drop state item)
 
             [:fight] (fight state)
+            [:run] (run state)
 
             [:quit] (quit)
             [:exit] (quit)

@@ -29,8 +29,10 @@
      })
 
 (def enemies
-    {:normal1 {:color :red}
-     :normal2 {:color :yellow}})
+    {:normal1 {:color :red 
+               :radius 20}
+     :normal2 {:color :yellow
+               :radius 20}})
 
 (def init-items
     {:raw-egg {:desc "This is a raw egg.  You probably want to cook it before eating it."
@@ -59,4 +61,4 @@
      :command ""
      :response ""
      :inventory :closed
-     :combat false})
+     :combat-status false})
