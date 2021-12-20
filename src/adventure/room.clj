@@ -19,6 +19,14 @@
         (q/rect x 0 wall-width wall-dist)
         (q/rect x (+ wall-dist door-width) wall-width wall-dist)))
 
+(defn draw-items-in-room [state items]
+    (if (not (empty? items))
+        (let [item (get-in state [:items (first items)])
+              image (get-in state [:images (first items)])]
+            (q/image-mode :corner)
+            (q/image image (:x item) (:y item) item-size item-size)
+            (draw-items-in-room state (rest items)))))
+
 (defn draw-room [state]
     (let [current-room (get-current-room state)
           nearby-rooms (:dir current-room)]
@@ -35,4 +43,5 @@
             (draw-wall-vertical (- window-width wall-width)))
         (if (and (get nearby-rooms :west) (not (:combat-status state)))
             (draw-wall-vertical-with-door 0)
-            (draw-wall-vertical 0))))
+            (draw-wall-vertical 0))
+        (draw-items-in-room state (:contents current-room))))
