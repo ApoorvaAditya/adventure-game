@@ -47,6 +47,7 @@
 
 (def init-adventurer
     {:location :foyer
+        :prev-location :foyer
         :inventory #{:key}
         :hp 10
         :lives 3

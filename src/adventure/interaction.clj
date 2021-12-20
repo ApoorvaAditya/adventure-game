@@ -8,13 +8,15 @@
 
 (defn move [state dir]
     (let [current-location (get-current-location state)
+          prev-location (get-in state [:adventurer :prev-location])
           dest (dir (get-in state [:map current-location :dir]))]
-        (println (:combat-status state))
         (cond (:combat-status state) 
                   (respond state "Cannot move to room while fighting")
+            (and (not (empty? (get-in state [:map current-location :enemies]))) (not (= dest prev-location)))
+                (respond state "Cannot move there without defeating enemies")
             (nil? dest)
                 (respond state "Cannot move in that direction")
-            :else (assoc-in state [:adventurer :location] dest))))
+            :else (assoc-in (assoc-in state [:adventurer :prev-location] current-location) [:adventurer :location] dest))))
 
 (defn create-items-str [state items]
     (if (empty? items)
