@@ -1,4 +1,5 @@
-(ns adventure.initial)
+(ns adventure.initial
+    (:use adventure.constants))
 
 (def init-map
     {:foyer {:desc "The walls are freshly painted but do not have any pictures.  You get the feeling it was just created for a game or something."
@@ -37,13 +38,19 @@
 (def init-items
     {:raw-egg {:desc "This is a raw egg.  You probably want to cook it before eating it."
                :name "a raw egg" 
-               :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\raw-egg.png"}
+               :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\raw-egg.png"
+               :x (+ wall-width (rand (- (- window-width (* 2 wall-width)) item-size)))
+               :y (+ wall-width (rand (- (- window-height (* 2 wall-width)) item-size)))}
      :key {:desc "This is a key. Might unlock something"
            :name "a key"
-           :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\key.png"}
+           :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\key.png"
+           :x (+ wall-width (rand (- (- window-width (* 2 wall-width)) item-size)))
+           :y (+ wall-width (rand (- (- window-height (* 2 wall-width)) item-size)))}
      :stick {:desc "This is a stick. Don't hit yourself with it"
              :name "a stick"
-             :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\stick.png"}})
+             :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\stick.png"
+             :x (+ wall-width (rand (- (- window-width (* 2 wall-width)) item-size)))
+             :y (+ wall-width (rand (- (- window-height (* 2 wall-width)) item-size)))}})
 
 (def init-adventurer
     {:location :foyer
@@ -52,7 +59,9 @@
         :hp 10
         :lives 3
         :tick 0
-        :seen #{}})
+        :seen #{}
+        :x (/ window-width 2)
+        :y (/ window-height 2)})
 
 (def init-state 
     {:map init-map
