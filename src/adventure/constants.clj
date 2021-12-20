@@ -22,5 +22,5 @@
 (def item-size 20)
 
 (def adventurer-color [255 0 0])
-(def adventurer-radius 30)
+(def adventurer-diameter 30)
 (def adventurer-vel 2)
