@@ -1,4 +1,5 @@
-(ns adventure.utils)
+(ns adventure.utils
+    (:use adventure.constants))
 
 (defn get-current-location [state]
     (get-in state [:adventurer :location]))
@@ -34,3 +35,10 @@
 
 (defn has-enemies [state]
     (not (empty? (get-in state [:map (get-current-location state) :enemies]))))
+
+(defn create-projectile [state x y dir-x dir-y]
+    (assoc state :projectiles (conj (:projectiles state) {:x x 
+                                                           :y y
+                                                           :vel projectile-vel
+                                                           :dir-x 0
+                                                           :dir-y 0})))

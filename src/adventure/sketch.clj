@@ -98,6 +98,17 @@
                 (update-enemies-positions (rest enemies))))
         state))
 
+(defn draw-projectiles [state projectiles]
+    (if (not (empty? projectiles))
+        (let [projectile (first projectiles)
+            x (:x projectile)
+            y (:y projectile)]
+            (q/fill projectile-color)
+            (q/rect-mode :center)
+            (q/rect x y projectile-size projectile-size)
+            (q/rect-mode :corner)
+            (draw-projectiles state (rest projectiles)))))
+
 (defn update [state]
     (-> state
         (update-adventurer-position)
@@ -131,6 +142,10 @@
               (assoc-in state [:adventurer :vel-x] 0)
           :else state))
 
+(defn mouse-pressed [state event]
+    (if (= (:button event) :left)
+        (create-projectile state (/ window-width 2) (/ window-height 2) 0 1)))
+
 (defn draw [state]
     (q/background background-color)
     (draw-room state)
@@ -138,6 +153,7 @@
     (draw-response state)
     (draw-adventurer state)
     (draw-enemies state (get-in state [:map (get-current-location state) :enemies]))
+    (draw-projectiles state (:projectiles state))
     (if (= (:inventory state) :opened)
         (draw-inventory state))
     (if (contains? state :image-to-draw)
@@ -149,6 +165,7 @@
     :setup setup
     :draw draw
     :update update
+    :mouse-pressed mouse-pressed
     :key-pressed key-pressed
     :key-released key-released
     :size [window-width window-height]) 

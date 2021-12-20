@@ -24,3 +24,7 @@
 (def adventurer-color [255 0 0])
 (def adventurer-diameter 30)
 (def adventurer-vel 2)
+
+(def projectile-vel 5)
+(def projectile-color [0 255 0])
+(def projectile-size 10)
