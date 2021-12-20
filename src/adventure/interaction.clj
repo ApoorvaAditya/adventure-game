@@ -50,9 +50,13 @@
 
 (defn take [state item]
     (let [location (get-current-location state)]
-        (if (contains? (get-in state [:map location :contents]) item)
-            (respond (remove-from-room (add-to-inventory state item) location item) (str "Picked up " (name item) "."))
-            (respond state "That item doesn't exist in the room"))))
+        (cond  (:combat-status state) 
+                (respond state "Cannot take while fighting")
+            (not (empty? (get-in state [:map location :enemies])))
+                (respond state "Cannot take something without defeating enemies")
+            (contains? (get-in state [:map location :contents]) item)
+                (respond (remove-from-room (add-to-inventory state item) location item) (str "Picked up " (name item) "."))
+            :else (respond state "That item doesn't exist in the room"))))
 
 (defn drop [state item]
     (let [location (get-current-location state)]
@@ -61,10 +65,16 @@
             (respond state (str (name item) " doesn't exist in your inventory")))))
 
 (defn fight [state]
-    (assoc state :combat-status true))
+    (if (not (empty? (get-in state [:map (get-current-location state) :enemies])))
+        (assoc state :combat-status true)
+        (respond state "Nothing to fight")))
 
 (defn run [state]
-    (assoc state :combat-status false))
+    (if (not (:combat-status state))
+        (respond state "Nothing to run from")
+        (let [current-location (get-current-location state)
+              dest (get-in state [:adventurer :prev-location])]
+            (assoc-in (assoc state :combat-status false) [:adventurer :location] dest))))
 
 (defn quit []
     (q/exit))
