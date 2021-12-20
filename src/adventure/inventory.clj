@@ -25,7 +25,18 @@
         (q/rect (+ wall-width inventory-padding) (+ wall-width inventory-padding) max-width max-height)
         (q/rect-mode :corner))
 
-(defn draw-items [state])
+(defn draw-items [state items x y max-width]
+    (if (not (empty? items))
+        (let [image (get-in state [:images (first items)])
+              height (- inventory-item-size inventory-text-size)]
+            (q/image-mode :corner)
+            (q/image image x y inventory-item-size height)
+            (q/text-align :center :center)
+            (q/text-size inventory-text-size)
+            (q/text (name (first items)) (+ x (/ inventory-item-size 2)) (+ y height))
+            (if (> (+ x inventory-item-size) max-width)
+                (draw-items state (rest items) (+ wall-width inventory-padding) (+ y inventory-item-size) max-width)
+                (draw-items state (rest items) (+ x inventory-item-size) y max-width)))))
 
 (defn draw-item [state]
     (let [image (get-in state [:images (:image-to-draw state)])]
@@ -37,4 +48,4 @@
           max-height (-> window-height (-  (* 2 wall-width)) (- (* 2 inventory-padding)) (/ inventory-item-size) (q/floor) (* inventory-item-size) (+ wall-width) (+ inventory-padding))]
         (draw-background-rect max-width max-height)
         (draw-grid max-width max-height)
-        (draw-items state)))
+        (draw-items state (get-in state [:adventurer :inventory]) (+ wall-width inventory-padding) (+ wall-width inventory-padding) max-width)))

@@ -17,3 +17,4 @@
 
 (def inventory-padding 20)
 (def inventory-item-size 50)
+(def inventory-text-size 10)

@@ -62,7 +62,6 @@
     (q/exit))
 
 (defn react [state input]
-    (println (get-in state [:adventurer :inventory]))
     (if (char? input)
         (update state :command str input)
         (match input
