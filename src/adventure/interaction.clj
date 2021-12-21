@@ -80,9 +80,18 @@
 (defn use-item [state item]
     (if (contains? (get-in state [:adventurer :inventory]) item)
         (cond (= item :key)
-            (if (contains? (get-in state [:adventurer :inventory]) :chest)
-                (-> state)
-                (respond state "Need a chest to open")))))
+              (if (contains? (get-in state [:adventurer :inventory]) :chest)
+                  (-> state
+                      (assoc-in [:adventurer :inventory] (conj (get-in state [:adventurer :inventory]) :treasure))
+                      (update-in [:adventurer :inventory] disj item)
+                      (update-in [:adventurer :inventory] disj :chest)
+                      (respond "You found the treasure! You win! Restart or quit"))
+                  (respond state "Need a chest to open"))
+             (= item :raw-egg)
+                (-> state
+                    (update-in [:adventurer :inventory] disj item)
+                    (respond "You eat the raw egg. It tastes bad")))
+        (respond state "Cannot use this")))
 
 (defn teleport [state dest]
     (if (not (nil? (get-in state [:map dest])))

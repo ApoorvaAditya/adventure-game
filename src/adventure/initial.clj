@@ -36,13 +36,7 @@
              :title ""
              :dir {:west :room1}
              :enemies {}
-             :contents #{:key}
-             }
-     :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."
-                :title "in the grue pen"
-                :dir {:north :foyer}
-                :contents #{}}
-     })
+             :contents #{:key :chest}}})
 
 (def init-items
     {:raw-egg {:desc "This is a raw egg.  You probably want to cook it before eating it."
@@ -59,16 +53,22 @@
              :name "a stick"
              :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\stick.png"
              :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
+             :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}
+     :chest {:desc "This is a locked chest. What treasures might it contain?"
+             :name "a chest"
+             :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\chest.png"
+             :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
+             :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}
+     :treasure {:desc "This is a pile of gold. Enjoy!"
+             :name "a pile of gold"
+             :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\treasure.png"
+             :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
              :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}})
 
 (def init-adventurer
     {:location :foyer
         :prev-location :foyer
-        :inventory #{:key}
-        :hp 10
-        :lives 3
-        :tick 0
-        :seen #{}
+        :inventory #{}
         :x (/ window-width 2)
         :y (/ window-height 2)
         :vel-x 0
