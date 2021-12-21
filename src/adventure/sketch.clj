@@ -109,6 +109,19 @@
             (q/rect-mode :corner)
             (draw-projectiles state (rest projectiles)))))
 
+(defn kill-enemies [state enemies projectile-x projectile-y]
+    (if (not (empty? enemies))
+        (let [id (key (first enemies))
+              enemy (val (first enemies))]
+            (kill-enemies 
+                (if (< (calc-dist (:x enemy) (:y enemy) projectile-x projectile-y) (/ (get-in state [:enemies (:type enemy) :diameter]) 2))
+                    (-> state 
+                        (assoc-in [:map (get-current-location state) :contents] (clojure.set/union (get-in state [:map (get-current-location state) :contents]) (:contents enemy)))
+                        (update-in [:map (get-current-location state) :enemies] dissoc id))
+                    state)
+                (rest enemies) projectile-x projectile-y))
+        state))
+
 (defn update-projectiles-positions [state projectiles]
     (if (not (empty? projectiles))
         (let [id (key (first projectiles))
@@ -139,13 +152,16 @@
                     (update-in [:projectiles] dissoc id)
                     (update-projectiles-positions (rest projectiles)))
                 (-> state
+                    (kill-enemies (get-in state [:map (get-current-location state) :enemies]) new-x new-y)
                     (assoc-in [:projectiles id :x] new-x)
                     (assoc-in [:projectiles id :y] new-y)
                     (update-projectiles-positions (rest projectiles)))))
         state))
 
 (defn update [state]
-    (-> state
+    (-> (if (and (:combat-status state) (not (has-enemies state))) 
+            (assoc state :combat-status false)
+            state)
         (update-adventurer-position)
         (update-enemies-positions (get-in state [:map (get-current-location state) :enemies]))
         (update-projectiles-positions (:projectiles state))))
@@ -179,8 +195,11 @@
           :else state))
 
 (defn mouse-pressed [state event]
-    (if (= (:button event) :left)
-        (create-projectile state (get-in state [:adventurer :x]) (get-in state [:adventurer :y]) (calc-dir-x state (q/mouse-x) (q/mouse-y)) (calc-dir-y state (q/mouse-x) (q/mouse-y)))))
+    (if (:combat-status state) 
+        (if (= (:button event) :left)
+            (create-projectile state (get-in state [:adventurer :x]) (get-in state [:adventurer :y]) (calc-dir-x state (q/mouse-x) (q/mouse-y)) (calc-dir-y state (q/mouse-x) (q/mouse-y)))
+            state)
+        (respond state "Start a fight to start shooting")))
 
 (defn draw [state]
     (q/background background-color)

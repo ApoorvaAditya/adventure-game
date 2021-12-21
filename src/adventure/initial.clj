@@ -21,20 +21,21 @@
              :enemies {1 {:type :normal1
                         :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
-                        :vel-x 1
-                        :vel-y 0}
+                        :vel-x (+ 1 (rand-int 4))
+                        :vel-y (+ 1 (rand-int 4))
+                        :contents #{:key}}
                     2 {:type :normal1
                         :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
-                        :vel-x 0
-                        :vel-y 0}}
-             :contents #{:key}
+                        :vel-x (+ 1 (rand-int 4))
+                        :vel-y (+ 1 (rand-int 4))
+                        :contents #{}}}
+             :contents #{}
              }
      :room2 {:desc ""
              :title ""
              :dir {:west :room1}
-             :enemies {{:type :normal1}
-                        {:type :normal1}}
+             :enemies {}
              :contents #{:key}
              }
      :grue-pen {:desc "It is very dark.  You are about to be eaten by a grue."

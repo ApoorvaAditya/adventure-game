@@ -62,3 +62,6 @@
             dir-x (/ dir1-x len)
             dir-y (/ dir1-y len)]
             dir-y))
+
+(defn calc-dist [x1 y1 x2 y2]
+    (Math/sqrt (+ (* (- x2 x1) (- x2 x1)) (* (- y2 y1) (- y2 y1)))))
