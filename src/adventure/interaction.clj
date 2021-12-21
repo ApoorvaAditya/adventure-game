@@ -44,6 +44,9 @@
                 (respond (assoc state :image-to-draw item) (:desc full-item)))
             (respond state "Open inventory first"))))
 
+(defn examine-room [state]
+    (respond state (get-in state [:map (get-current-location state) :desc])))
+
 (defn back [state]
     (if (contains? state :image-to-draw)
         (dissoc state :image-to-draw)
@@ -90,7 +93,11 @@
              (= item :raw-egg)
                 (-> state
                     (update-in [:adventurer :inventory] disj item)
-                    (respond "You eat the raw egg. It tastes bad")))
+                    (respond "You eat the raw egg. It tastes bad"))
+             (= item :stick)
+                (-> state
+                    (drop item)
+                    (respond "You poke your eye while playing with the stick. You throw it away")))
         (respond state "Cannot use this")))
 
 (defn teleport [state dest]
@@ -127,6 +134,8 @@
             [:open] (open-inventory state)
             [:o] (open-inventory state)
 
+            [:examine] (examine-room state)
+            [:examine :room] (examine-room state)
             [:examine item] (examine state item)
             [:back] (back state)
             [:take item] (take state item)
@@ -134,6 +143,7 @@
             [:pickup item] (take state item)
             [:drop item] (drop state item)
 
+            [:f] (fight state)
             [:fight] (fight state)
             [:run] (run state)
 
