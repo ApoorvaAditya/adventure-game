@@ -100,7 +100,7 @@
 
 (defn draw-projectiles [state projectiles]
     (if (not (empty? projectiles))
-        (let [projectile (first projectiles)
+        (let [projectile (val (first projectiles))
             x (:x projectile)
             y (:y projectile)]
             (q/fill projectile-color)
@@ -109,10 +109,47 @@
             (q/rect-mode :corner)
             (draw-projectiles state (rest projectiles)))))
 
+(defn update-projectiles-positions [state projectiles]
+    (if (not (empty? projectiles))
+        (let [id (key (first projectiles))
+              projectile (val (first projectiles))
+              padding (+ wall-width (/ projectile-size 2))
+              min-x padding
+              max-x (- window-width padding)
+              min-y padding
+              max-y (- window-height padding)
+              x (:x projectile)
+              y (:y projectile)
+              vel-x (* (:vel projectile) (:dir-x projectile))
+              vel-y (* (:vel projectile) (:dir-y projectile))
+              try-x (+ x vel-x)
+              try-y (+ y vel-y)
+              new-x (if (> try-x max-x)
+                        max-x 
+                        (if (< try-x min-x)
+                            min-x
+                            try-x))
+              new-y (if (> try-y max-y)
+                        max-y 
+                        (if (< try-y min-y)
+                            min-y
+                            try-y))]
+            (println (or (> try-x max-x) (> try-y max-y) (< try-x min-x) (< try-y min-y)))
+            (if (or (> try-x max-x) (> try-y max-y) (< try-x min-x) (< try-y min-y))
+                (-> state
+                    (update-in [:projectiles] dissoc id)
+                    (update-projectiles-positions (rest projectiles)))
+                (-> state
+                    (assoc-in [:projectiles id :x] new-x)
+                    (assoc-in [:projectiles id :y] new-y)
+                    (update-projectiles-positions (rest projectiles)))))
+        state))
+
 (defn update [state]
     (-> state
         (update-adventurer-position)
-        (update-enemies-positions (get-in state [:map (get-current-location state) :enemies]))))
+        (update-enemies-positions (get-in state [:map (get-current-location state) :enemies]))
+        (update-projectiles-positions (:projectiles state))))
 
 (defn key-pressed [state event]
     (cond (= (:key-code event) 10)

@@ -37,8 +37,8 @@
     (not (empty? (get-in state [:map (get-current-location state) :enemies]))))
 
 (defn create-projectile [state x y dir-x dir-y]
-    (assoc state :projectiles (conj (:projectiles state) {:x x 
-                                                           :y y
-                                                           :vel projectile-vel
-                                                           :dir-x 0
-                                                           :dir-y 0})))
+    (assoc-in state [:projectiles (java.util.UUID/randomUUID)] {:x x 
+        :y y
+        :vel projectile-vel
+        :dir-x dir-x
+        :dir-y dir-y}))

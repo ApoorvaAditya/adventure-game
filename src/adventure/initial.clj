@@ -83,4 +83,4 @@
      :response ""
      :inventory :closed
      :combat-status false
-     :projectiles []})
+     :projectiles {}})
