@@ -4,7 +4,8 @@
     (:require [clojure.core.match :refer [match]])
     (:require [quil.core :as q])
     (:use adventure.utils)
-    (:use adventure.inventory))
+    (:use adventure.inventory)
+    (:use adventure.initial))
 
 (defn move [state dir]
     (let [current-location (get-current-location state)
@@ -76,10 +77,20 @@
               dest (get-in state [:adventurer :prev-location])]
             (assoc-in (assoc state :combat-status false) [:adventurer :location] dest))))
 
+(defn use-item [state item]
+    (if (contains? (get-in state [:adventurer :inventory]) item)
+        (cond (= item :key)
+            (if (contains? (get-in state [:adventurer :inventory]) :chest)
+                (-> state)
+                (respond state "Need a chest to open")))))
+
 (defn teleport [state dest]
     (if (not (nil? (get-in state [:map dest])))
         (assoc-in state [:adventurer :location] dest)
         (respond state "Cannot teleport there")))
+
+(defn restart [state]
+    (assoc init-state :images (:images state)))
 
 (defn quit []
     (q/exit))
@@ -117,8 +128,13 @@
             [:fight] (fight state)
             [:run] (run state)
 
+            [:use item] (use-item state item)
+
             [:teleport dest] (teleport state dest)
             [:tp dest] (teleport state dest)
+
+            [:restart] (restart state)
+            [:r] (restart state)
 
             [:quit] (quit)
             [:exit] (quit)
