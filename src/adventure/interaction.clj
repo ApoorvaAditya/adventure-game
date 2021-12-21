@@ -76,6 +76,11 @@
               dest (get-in state [:adventurer :prev-location])]
             (assoc-in (assoc state :combat-status false) [:adventurer :location] dest))))
 
+(defn teleport [state dest]
+    (if (not (nil? (get-in state [:map dest])))
+        (assoc-in state [:adventurer :location] dest)
+        (respond state "Cannot teleport there")))
+
 (defn quit []
     (q/exit))
 
@@ -111,6 +116,9 @@
 
             [:fight] (fight state)
             [:run] (run state)
+
+            [:teleport dest] (teleport state dest)
+            [:tp dest] (teleport state dest)
 
             [:quit] (quit)
             [:exit] (quit)
