@@ -123,6 +123,16 @@
         (assoc-in state [:adventurer :location] dest)
         (respond state "Cannot teleport there")))
 
+(defn kill-all [state enemies]
+    (if (not (empty? enemies))
+        (let [id (key (first enemies))
+              enemy (val (first enemies))]
+            (-> state
+                (update-in [:map (get-current-location state) :contents] clojure.set/union (:contents enemy))
+                (update-in [:map (get-current-location state) :enemies] dissoc id)
+                (kill-all (rest enemies))))
+        state))
+
 (defn restart [state]
     (assoc init-state :images (:images state)))
 
@@ -174,6 +184,7 @@
 
             [:teleport dest] (teleport state dest)
             [:tp dest] (teleport state dest)
+            [:kill :all] (kill-all state (get-in state [:map (get-current-location state) :enemies]))
 
             [:restart] (restart state)
             [:r] (restart state)

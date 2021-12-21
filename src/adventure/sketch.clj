@@ -114,9 +114,9 @@
         (let [id (key (first enemies))
               enemy (val (first enemies))]
             (kill-enemies 
-                (if (< (calc-dist (:x enemy) (:y enemy) projectile-x projectile-y) (/ (get-in state [:enemies (:type enemy) :diameter]) 2))
+                (if (< (calc-dist (:x enemy) (:y enemy) projectile-x projectile-y) (/ (+ (get-in state [:enemies (:type enemy) :diameter]) projectile-size) 2))
                     (-> state 
-                        (assoc-in [:map (get-current-location state) :contents] (clojure.set/union (get-in state [:map (get-current-location state) :contents]) (:contents enemy)))
+                        (update-in [:map (get-current-location state) :contents] clojure.set/union (:contents enemy))
                         (update-in [:map (get-current-location state) :enemies] dissoc id))
                     state)
                 (rest enemies) projectile-x projectile-y))
