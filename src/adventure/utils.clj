@@ -42,3 +42,23 @@
         :vel projectile-vel
         :dir-x dir-x
         :dir-y dir-y}))
+
+(defn calc-dir-x [state mouse-x mouse-y]
+    (let [adventurer-x (get-in state [:adventurer :x])
+          adventurer-y (get-in state [:adventurer :y])
+          dir1-x (- mouse-x adventurer-x)
+          dir1-y (- mouse-y adventurer-y)
+          len (Math/sqrt (+ (* dir1-x dir1-x) (* dir1-y dir1-y)))
+          dir-x (/ dir1-x len)
+          dir-y (/ dir1-y len)]
+          dir-x))
+
+(defn calc-dir-y [state mouse-x mouse-y]
+    (let [adventurer-x (get-in state [:adventurer :x])
+            adventurer-y (get-in state [:adventurer :y])
+            dir1-x (- mouse-x adventurer-x)
+            dir1-y (- mouse-y adventurer-y)
+            len (Math/sqrt (+ (* dir1-x dir1-x) (* dir1-y dir1-y)))
+            dir-x (/ dir1-x len)
+            dir-y (/ dir1-y len)]
+            dir-y))

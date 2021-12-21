@@ -134,7 +134,6 @@
                         (if (< try-y min-y)
                             min-y
                             try-y))]
-            (println (or (> try-x max-x) (> try-y max-y) (< try-x min-x) (< try-y min-y)))
             (if (or (> try-x max-x) (> try-y max-y) (< try-x min-x) (< try-y min-y))
                 (-> state
                     (update-in [:projectiles] dissoc id)
@@ -181,7 +180,7 @@
 
 (defn mouse-pressed [state event]
     (if (= (:button event) :left)
-        (create-projectile state (/ window-width 2) (/ window-height 2) 0 1)))
+        (create-projectile state (get-in state [:adventurer :x]) (get-in state [:adventurer :y]) (calc-dir-x state (q/mouse-x) (q/mouse-y)) (calc-dir-y state (q/mouse-x) (q/mouse-y)))))
 
 (defn draw [state]
     (q/background background-color)
