@@ -127,7 +127,8 @@
     (assoc init-state :images (:images state)))
 
 (defn quit []
-    (q/exit))
+    (q/exit)
+    (System/exit 0))
 
 (defn react [state input]
     (if (char? input)
@@ -137,12 +138,16 @@
             [:go dir] (move state dir)
             [:n] (move state :north)
             [:north] (move state :north)
+            [:up] (move state :north)
             [:s] (move state :south)
             [:south] (move state :south)
+            [:down] (move state :south)
             [:e] (move state :east)
             [:east] (move state :east)
+            [:right] (move state :east)
             [:w] (move state :west)
             [:west] (move state :west)
+            [:left] (move state :west)
 
             [:look] (look state)
             
