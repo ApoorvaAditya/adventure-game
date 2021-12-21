@@ -1,9 +1,9 @@
 (ns adventure.constants)
 
-(def window-width 500)
-(def window-height 400)
+(def window-width 1000)
+(def window-height 800)
 
-(def background-color 127)
+(def background-color 0)
 
 (def wall-width 50)
 (def door-width 100)
@@ -16,10 +16,10 @@
 (def text-field-padding 10)
 
 (def inventory-padding 20)
-(def inventory-item-size 50)
-(def inventory-text-size 10)
+(def inventory-item-size 80)
+(def inventory-text-size 20)
 
-(def item-size 20)
+(def item-size 50)
 
 (def adventurer-color [255 0 0])
 (def adventurer-diameter 30)

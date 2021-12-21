@@ -94,10 +94,28 @@
                 (-> state
                     (update-in [:adventurer :inventory] disj item)
                     (respond "You eat the raw egg. It tastes bad"))
+            (= item :boiled-egg)
+                (-> state
+                    (update-in [:adventurer :inventory] disj item)
+                    (respond "You eat the boiled egg. It tastes bad. At least it's better than eating raw."))
              (= item :stick)
                 (-> state
                     (drop item)
-                    (respond "You poke your eye while playing with the stick. You throw it away")))
+                    (respond "You poke your eye while playing with the stick. You throw it away"))
+             (= item :lighter)
+                (if (contains? (get-in state [:adventurer :inventory]) :stick)
+                    (-> state
+                        (update-in [:adventurer :inventory] disj item)
+                        (update-in [:adventurer :inventory] disj :stick)
+                        (update-in [:adventurer :inventory] conj :torch))
+                    (respond state "Needs something to light on fire."))
+             (= item :torch)
+                (if (contains? (get-in state [:adventurer :inventory]) :raw-egg)
+                    (-> state 
+                        (update-in [:adventurer :inventory] disj item)
+                        (update-in [:adventurer :inventory] disj :raw-egg)
+                        (update-in [:adventurer :inventory] conj :boiled-egg))
+                    (respond state "Nothing to cook.")))
         (respond state "Cannot use this")))
 
 (defn teleport [state dest]

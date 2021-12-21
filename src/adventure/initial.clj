@@ -16,8 +16,7 @@
              :title "in the foyer"
              :dir {:north :room1}
              :enemies {}
-             :contents #{:raw-egg
-                         :stick}}
+             :contents #{}}
      :room1 {:desc "Just a decrepit room"
              :title "in a decrepit room"
              :dir {:south :foyer
@@ -28,7 +27,7 @@
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :vel-x (+ 1 (rand-int 4))
                         :vel-y (+ 1 (rand-int 4))
-                        :contents #{}}
+                        :contents #{:stick}}
                     :2 {:type :normal1
                         :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
@@ -51,7 +50,7 @@
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :vel-x (+ 1 (rand-int 4))
                         :vel-y (+ 1 (rand-int 4))
-                        :contents #{}}}
+                        :contents #{:raw-egg}}}
              :contents #{}}
      :room3 {:desc "Just a decrepit room"
              :title "in a decrepit room"
@@ -93,7 +92,7 @@
              :dir {:north :room2
                    :west :room9
                    :south :room8}
-             :enemies {:1 {:type :normal1
+             :enemies {:1 {:type :normal2
                         :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :vel-x (+ 1 (rand-int 4))
@@ -110,18 +109,18 @@
              :title "in a decrepit room"
              :dir {:north :room4
                    :east :room7}
-             :enemies {:1 {:type :normal1
+             :enemies {:1 {:type :normal2
                         :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :vel-x (+ 1 (rand-int 4))
                         :vel-y (+ 1 (rand-int 4))
                         :contents #{}}
-                    :2 {:type :normal1
+                    :2 {:type :normal2
                         :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 (get-in enemies [:normal1 :diameter])))))
                         :vel-x (+ 1 (rand-int 4))
                         :vel-y (+ 1 (rand-int 4))
-                        :contents #{}}}
+                        :contents #{:lighter}}}
              :contents #{}}
      :room7 {:desc "Just a decrepit room"
              :title "in a decrepit room"
@@ -202,7 +201,7 @@
                :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
                :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}
      :boiled-egg {:desc "This is a boiled egg.  Certainly tastes better than a raw one."
-               :name "a raw egg" 
+               :name "a boiled egg" 
                :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\boiled-egg.png"
                :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
                :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}
@@ -214,6 +213,16 @@
      :stick {:desc "This is a stick. Don't hit yourself with it"
              :name "a stick"
              :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\stick.png"
+             :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
+             :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}
+     :lighter {:desc "This is a lighter. Don't burn yourself"
+             :name "a lighter"
+             :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\lighter.png"
+             :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
+             :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}
+     :torch {:desc "This is a torch. Can light the way or cook something"
+             :name "a torch"
+             :url "C:\\Users\\apoor\\Programming\\Classes\\CS 225\\Honors\\adventure\\src\\adventure\\images\\torch.png"
              :x (+ wall-width (rand-int (- (- window-width (* 2 wall-width)) (* 2 item-size))))
              :y (+ wall-width (rand-int (- (- window-height (* 2 wall-width)) (* 2 item-size))))}
      :chest {:desc "This is a locked chest. What treasures might it contain?"
